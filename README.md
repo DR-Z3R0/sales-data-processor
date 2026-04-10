@@ -52,6 +52,16 @@ order_id,date,customer,amount,status
 1004,Unknown,Nina Jones,18.6,Completed
 ```
 
+## Error Handling
+
+If a row contains invalid data:
+
+- invalid amount -> row skipped
+- invalid date -> replaced with "Unknown"
+- missing customer -> replaced with "Unknown"
+
+All issues are logged to `data_warnings.log`.
+
 ## Requirements
 
 - **Python**: 3.10+
