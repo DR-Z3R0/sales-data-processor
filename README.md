@@ -1,21 +1,23 @@
 # Sales Data Cleaning & Analysis Script
 
-## Overview
-This Python script processes sales data from a CSV file, cleans and normalizes the data, generates a summary report in the terminal, and saves the cleaned data to a new CSV file. It also logs warnings for any problematic rows.
+## Project Overview
+A Python-based data cleaning and analysis pipeline that processes messy sales CSV data, normalizes inconsistent fields, handles invalid entries, logs data quality issues, and generates summary reports.
+This project simulates a lightweight ETL-style workflow where raw, inconsistent sales data must be validated and cleaned before analysis.
+It demonstrates practical data processing, error handling, and structured logging commonly used in QA and backend automation tasks.
 
 Key features:
 - Normalizes dates, customer names, amounts, and statuses.
 - Skips rows with invalid amounts.
 - Calculates summary statistics:
-  - Total completed sales amount
   - Number of completed orders
-  - Number of refunds
+  - Total completed sales amount
+  - Average completed order value
   - Number of pending orders
-  - Average order value (for completed orders)
+  - Number of refunds
 - Logs warnings and errors to a separate log file.
 
 ## Why This Exists
-This project simulates a real-world scenario where raw sales data may contain missing, inconsistent, or malformed values that must be cleaned before analysis.
+This project simulates a lightweight ETL-style data cleaning pipeline for a real-world scenario where raw sales data may contain missing, inconsistent, or malformed values that must be cleaned before analysis.
 
 ## Example
 
