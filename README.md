@@ -25,6 +25,7 @@ order_id,date,customer,amount,status
 1001,2024-01-02,John Smith,120.50,Completed
 1002,invalid_date,,NaN,Pending
 1003,02/16/2024,,96.66,Pending
+1004,,Nina Jones,18.60,Completed
 ```
 
 ### Output (Terminal)
@@ -32,9 +33,9 @@ order_id,date,customer,amount,status
 ===== Sales Summary Report =====
 
 Completed Orders:
-  Count                         : 1
-  Total Amount                  : $120.50
-  Average Order Value           : $120.50
+  Count                         : 2
+  Total Amount                  : $139.10
+  Average Order Value           : $69.55
 
 Other Statuses:
   Pending Orders                : 1
@@ -48,6 +49,7 @@ Other Statuses:
 order_id,date,customer,amount,status
 1001,2024-01-02,John Smith,120.5,Completed
 1003,2024-02-16,Unknown,96.66,Pending
+1004,Unknown,Nina Jones,18.6,Completed
 ```
 
 ## Requirements
