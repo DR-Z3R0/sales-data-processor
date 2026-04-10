@@ -1,2 +1,126 @@
-# sales-data-processor
-Python script for cleaning, validating, and analyzing sales CSV data with logging and summary reporting.
+# Sales Data Cleaning & Analysis Script
+
+## Overview
+This Python script processes sales data from a CSV file, cleans and normalizes the data, generates a summary report in the terminal, and saves the cleaned data to a new CSV file. It also logs warnings for any problematic rows.
+
+Key features:
+- Normalizes dates, customer names, amounts, and statuses.
+- Skips rows with invalid amounts.
+- Calculates summary statistics:
+  - Total completed sales amount
+  - Number of completed orders
+  - Number of refunds
+  - Number of pending orders
+  - Average order value (for completed orders)
+- Logs warnings and errors to a separate log file.
+
+## Why This Exists
+This project simulates a real-world scenario where raw sales data may contain missing, inconsistent, or malformed values that must be cleaned before analysis.
+
+## Example
+
+### Input (`sales_data.csv`)
+```csv
+order_id,date,customer,amount,status
+1001,2024-01-02,John Smith,120.50,Completed
+1002,invalid_date,,NaN,Pending
+1003,02/16/2024,,96.66,Pending
+```
+
+### Output (Terminal)
+```text
+===== Sales Summary Report =====
+
+Completed Orders:
+  Count                         : 1
+  Total Amount                  : $120.50
+  Average Order Value           : $120.50
+
+Other Statuses:
+  Pending Orders                : 1
+  Refunds                       : 0
+
+================================
+```
+
+### Output File (`cleaned_sales.csv`)
+```csv
+order_id,date,customer,amount,status
+1001,2024-01-02,John Smith,120.5,Completed
+1003,2024-02-16,Unknown,96.66,Pending
+```
+
+## Requirements
+
+- **Python**: 3.10+
+- **Libraries**:
+  - `pandas`
+- Standard library modules (`csv`, `sys`, `logging`, `typing`) are included with Python.
+
+All third-party dependencies are listed in `requirements.txt`.
+
+## Setup Instructions
+
+1. **Create a virtual environment (optional but recommended)**
+
+```bash
+python -m venv venv
+# Activate the environment:
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+```
+
+2. **Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+3. **Ensure your input CSV file is named `sales_data.csv` or update the `INPUT_FILE` variable in the script**
+
+## Running the Script
+
+Run the script from the terminal:
+
+```bash
+python process_sales.py
+```
+
+When executed, the script will:
+- Read `sales_data.csv`
+- Normalize and clean the data
+- Print a summary report in the terminal
+- Save cleaned data to `cleaned_sales.csv`
+- Log warnings to `data_warnings.log`
+
+## Output Files
+
+- `cleaned_sales.csv` = Cleaned version of your sales data.
+- `data_warnings.log` = Log file with warnings for missing or invalid data.
+
+## Customization
+
+You can modify the following configuration variables at the top of the script:
+
+| Variable            | Description                                                        |
+| ------------------- | ------------------------------------------------------------------ |
+| `INPUT_FILE`        | Path to the input CSV file                                         |
+| `OUTPUT_FILE`       | Path to save the cleaned CSV                                       |
+| `WARNINGS_LOG_FILE` | Path to save warnings and errors                                   |
+| `DEFAULT_COLS`      | Column names to use if input CSV has no header                     |
+| `VALID_STATUSES`    | Set of allowed order statuses (`Completed`, `Pending`, `Refunded`) |
+| `LABEL_WIDTH`       | Fixed width of the summary's left-hand column                      |
+
+## Notes
+
+- The script automatically handles missing or malformed data and logs any warnings.
+- Rows with invalid amounts are skipped to ensure clean reporting.
+- The script uses pandas for CSV reading, date handling, and data manipulation.
+
+## Troubleshooting
+
+- **ModuleNotFoundError for pandas**: Make sure you installed dependencies with pip install -r requirements.txt.
+- **Python version error**: Ensure you are using Python 3.10 or higher.
+- **Permission errors**: Check that the script has write access to the output and log files.
