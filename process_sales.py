@@ -7,6 +7,7 @@ import math
 import logging
 import pandas as pd
 from typing import Any, Optional
+from dataclasses import dataclass
 
 
 # ----------------------------------
@@ -25,6 +26,14 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
+@dataclass
+class SaleRecord:
+    order_id: str
+    date: str
+    customer: str
+    amount: float
+    status: str
+
 
 # ----------------------------------
 # Functions
@@ -32,7 +41,7 @@ logging.basicConfig(
 def is_csv_file(file_path: str) -> bool:
     return bool(file_path and file_path.endswith('.csv'))
 
-def validate_configurations():
+def validate_configurations() -> None:
     configs = {
         "INPUT_FILE": {
             "value": INPUT_FILE,
@@ -116,13 +125,21 @@ def normalize_all_data(data: list) -> list:
         new_row["date"] = normalize_date(new_row.get("date", ""), i, customer=customer)
         new_row["status"] = normalize_status(new_row.get("status", ""), i, customer=customer)
         
-        cleaned.append(new_row)
+        cleaned.append(
+            SaleRecord(
+                order_id=new_row["order_id"],
+                date=new_row["date"],
+                customer=new_row["customer"],
+                amount=new_row["amount"],
+                status=new_row["status"]
+            )
+        )
     
     return cleaned
 
-def calculate_order_summary(summary: dict, order: dict) -> None:
-    status = order.get("status")
-    amount = order.get("amount")
+def calculate_order_summary(summary: dict, order: SaleRecord) -> None:
+    status = order.status
+    amount = order.amount
 
     match status:
         case "Completed":
@@ -134,13 +151,13 @@ def calculate_order_summary(summary: dict, order: dict) -> None:
             summary["refund_count"] += 1
 
 
-def analyze_data(cleaned_data: list) -> dict:
+def analyze_data(cleaned_data: list[SaleRecord]) -> dict:
     summary = {
-        "total_completed_amount": 0,
         "completed_orders_count": 0,
-        "refund_count": 0,
+        "total_completed_amount": 0,
+        "average_order_value": 0.0,
         "pending_count": 0,
-        "average_order_value": 0.0
+        "refund_count": 0
     }
 
     for order in cleaned_data:
@@ -175,27 +192,26 @@ def print_summary(summary: dict) -> None:
 
     print("\n" + "="*32)
 
-def save_cleaned_data(cleaned_data: list, output_file: str):
+def save_cleaned_data(cleaned_data: list, output_file: str) -> None:
     data_frame = pd.DataFrame(cleaned_data)
     data_frame.to_csv(output_file, index=False)
+
+def run_pipeline(input_file: str, output_file: str) -> dict:
+    sales_data = read_csv_file(input_file)
+    normalized_data = normalize_all_data(sales_data)
+    summary = analyze_data(normalized_data)
+    print_summary(summary)
+    save_cleaned_data(normalized_data, output_file)
+    return summary
 
 
 # ----------------------------------
 # Main Application
 # ----------------------------------
 if __name__ == "__main__":
-
     validate_configurations()
-
     try:
-        sales_data = read_csv_file(INPUT_FILE)
-        normalized_data = normalize_all_data(sales_data)
-
-        summary = analyze_data(normalized_data)
-        print_summary(summary)
-
-        save_cleaned_data(normalized_data, OUTPUT_FILE)
-
+        run_pipeline(INPUT_FILE, OUTPUT_FILE)
     except Exception as e:
         logging.error(f"Error processing file: {e}")
         raise
