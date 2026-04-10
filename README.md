@@ -2,7 +2,9 @@
 
 ## Project Overview
 A Python-based data cleaning and analysis pipeline that processes messy sales CSV data, normalizes inconsistent fields, handles invalid entries, logs data quality issues, and generates summary reports.
+
 This project simulates a lightweight ETL-style workflow where raw, inconsistent sales data must be validated and cleaned before analysis.
+
 It demonstrates practical data processing, error handling, and structured logging commonly used in QA and backend automation tasks.
 
 Key features:
